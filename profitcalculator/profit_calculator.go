@@ -1,21 +1,28 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 func main() {
-	var profitAmount float64
-	var profitRate float64
-	var durationMonths float64
+	var revenue float64
+	var expenses float64
+	var taxrate float64
 
 	fmt.Print("Enter your Profit amount : ")
-	fmt.Scan(&profitAmount)
+	fmt.Scan(&revenue)
 
 	fmt.Print("Enter your Profit Rate : ")
-	fmt.Scan(&profitRate)
+	fmt.Scan(&expenses)
 
-	fmt.Print("Enter the Duration in Months : ")
-	fmt.Scan(&durationMonths)
+	fmt.Print("Enter the taxrate : ")
+	fmt.Scan(&taxrate)
 
-	totalProfit := (profitAmount * profitRate * durationMonths) / (100 * 12)
-	fmt.Println("Total Profit : ", totalProfit)
+	var ebt = revenue - expenses
+	profit := float64(ebt) - (1 * taxrate / 100)
+	ratio := (ebt / profit) * 100
+
+	fmt.Println("Earnings Before Tax : ", ebt)
+	fmt.Println("Profit After Tax : ", profit)
+	fmt.Println("Profit Ratio : ", ratio)
 }
