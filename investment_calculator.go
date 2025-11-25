@@ -29,8 +29,8 @@ func main() {
 	result := calculateFutureValue(investmentAmount, expectedReturnRate, years)
 	fmt.Printf("Calculated Future Value result : %.2f\n", result)
 
-	adjustedInflat := calculateFutureValueWithInflation(investmentAmount, expectedReturnRate, years, inflationRate)
-	fmt.Printf("Calculated Future Value Adjusted for Inflation : %.2f\n", adjustedInflat)
+	fv, fvAdjusted := calculateFutureValueWithInflation(investmentAmount, expectedReturnRate, years, inflationRate)
+	fmt.Printf("Calculated Future Value Adjusted for Inflation : %.2f\n %.2f\n", fv, fvAdjusted)
 
 	var futureValue = investmentAmount * math.Pow(1+expectedReturnRate/100, years)
 	futureInflationValue := futureValue / math.Pow(1+inflationRate/100, years) // using const keyword
@@ -57,8 +57,9 @@ func calculateFutureValue(principal, rate, time float64) float64 {
 	return fv
 }
 
-func calculateFutureValueWithInflation(principal, rate, time, inflation float64) float64 {
-	fv := principal * math.Pow(1+rate/100, time)
-	fvAdjusted := fv / math.Pow(1+inflation/100, time)
-	return fvAdjusted
+func calculateFutureValueWithInflation(principal, rate, time, inflation float64) (fv float64, fvAdjusted float64) {
+	fv = principal * math.Pow(1+rate/100, time)
+	fvAdjusted = fv / math.Pow(1+inflation/100, time)
+	return fv, fvAdjusted // return typed values
+	// return // return untyped values
 }
