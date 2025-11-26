@@ -59,6 +59,11 @@ func main() {
 		fmt.Println("Error creating user:", err)
 		return
 	}
+	admin := user.NewAdmin("test@gmail.com", "test123")
+	if err != nil {
+		fmt.Println("error while access admin detail")
+	}
+	admin.PrintDetailsPointer()
 	// appUserPointer := newUserPointer(firstName, lastName, birthDate)
 
 	// printUserDetails(appUser)

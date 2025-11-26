@@ -14,6 +14,12 @@ type User struct {
 	createdAt time.Time
 }
 
+type Admin struct {
+	email    string
+	password string
+	User
+}
+
 func NewUser(firstName, lastName, birthDate string) User {
 	return User{
 		firstName: firstName,
@@ -23,6 +29,10 @@ func NewUser(firstName, lastName, birthDate string) User {
 	}
 }
 
+/*
+constructor created with pointer, it hold the address of the variable.
+it dont use much memory as compared to without pointer declaration.
+*/
 func NewUserPointer(firstName, lastName, birthDate string) (*User, error) {
 	if firstName == "" || lastName == "" || birthDate == "" {
 		return nil, errors.New("input should not be empty")
@@ -33,6 +43,23 @@ func NewUserPointer(firstName, lastName, birthDate string) (*User, error) {
 		birthDate: birthDate,
 		createdAt: time.Now(),
 	}, nil
+}
+
+// creating contructor without pointer. its stores the copy of value.
+func NewAdmin(email, password string) Admin {
+	// if email == "" || password == "" {
+	// 	return nil, errors.New("email and password fields required")
+	// }
+	return Admin{
+		email:    email,
+		password: password,
+		User: User{
+			firstName: "Admin",
+			lastName:  "Admin",
+			birthDate: "----",
+			createdAt: time.Now(),
+		},
+	}
 }
 
 func (u User) PrintDetails() {
