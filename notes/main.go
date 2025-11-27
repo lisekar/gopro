@@ -3,9 +3,10 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"notes/note"
 	"os"
 	"strings"
+
+	"github.com/livisekar/gopro/notes/note"
 )
 
 func main() {
@@ -21,6 +22,14 @@ func main() {
 		fmt.Println("invalid input")
 	}
 	userNote.Display()
+	userNote.Save()
+
+	if err != nil {
+		fmt.Println("Saving note failed")
+		return
+	}
+
+	fmt.Println("Note saved !")
 }
 
 func getNoteData() (string, string, error) {
@@ -51,7 +60,7 @@ func getUserInput(prompt string) (string, error) {
 			// }
 			// return value, nil
 	*/
-	reader := bufio.NewReader(os.Stdin)
+	reader := bufio.NewReader(os.Stdin) // reade user input text from command line
 	text, err := reader.ReadString('\n')
 	if err != nil {
 		fmt.Println("invalid input")
