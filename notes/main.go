@@ -7,9 +7,40 @@ import (
 	"strings"
 
 	"github.com/livisekar/gopro/notes/note"
+	"github.com/livisekar/gopro/notes/todo"
 )
 
+type saver interface {
+	Save() error
+}
+
+type output interface {
+	saver
+	Display()
+}
+
+// access any type value in interface {} method
+func add[T int | float64 | string](a, b T) T { // generic method - with placeholder [T] - it should be anytype
+	// without Generic method.
+	// aInt, aIsInt := a.(int)
+	// bInt, bIsInt := b.(int)
+	// if aIsInt && bIsInt {
+	// 	return aInt + bInt
+	// }
+	// return nil
+	return a + b
+}
+
 func main() {
+
+	// call the generic method
+	result := add(1, 2)
+	fmt.Println(result)
+
+	printSomething(23)      // integer
+	printSomething(1.5)     // float32
+	printSomething("Hello") // string
+
 	title, content, err := getNoteData()
 	if err != nil {
 		fmt.Print(err)
@@ -21,16 +52,87 @@ func main() {
 	if err != nil {
 		fmt.Println("invalid input")
 	}
-	userNote.Display()
-	userNote.Save()
+	outputData(userNote)
+	// userNote.Display()
+	// userNote.Save()
 
+	// var todoText *todo.Todo
+	todoText, err := getUserInput("Todo text :")
+	fmt.Println(todoText)
+	todo, err := todo.New(todoText)
 	if err != nil {
-		fmt.Println("Saving note failed")
+		fmt.Print(err)
 		return
 	}
 
-	fmt.Println("Note saved !")
+	// todo.Display()
+	// todo.Save()
+
+	// display data by embeded interface
+	outputData(todo)
+	// if err != nil {
+	// 	fmt.Println("Saving note failed")
+	// 	return
+	// }
+	err = saveData(todo) // call this function by interface
+	if err != nil {
+		return
+	}
+
+	err = saveData(userNote) // call this function by interface
+	if err != nil {
+		return
+	}
+
+	// fmt.Println("Note saved !")
+
 }
+
+func printSomething(value interface{}) {
+	// Alternate syntax
+	typeVal, checkType := value.(int)
+	if checkType {
+		fmt.Println("Integer : ", typeVal)
+	}
+
+	floatVal, checkType := value.(float64)
+	if checkType {
+		fmt.Println("Integer : ", floatVal)
+	}
+
+	stringVal, checkType := value.(string)
+	if checkType {
+		fmt.Println("Integer : ", stringVal)
+	}
+
+	// switch value.(type) {        // syntax for switch statement
+	// case int:
+	// 	fmt.Println("Integer : ", value)
+	// case float64:
+	// 	fmt.Println("float64 : ", value)
+	// case string:
+	// 	fmt.Println("string : ", value)
+	// }
+}
+
+// by accesing with embeded interface
+func outputData(data output) error {
+	data.Display()
+	return saveData(data)
+}
+
+// method accesing with intrface
+func saveData(data saver) error {
+	err := data.Save()
+	if err != nil {
+		fmt.Println("Saving the note failed")
+		return err
+	}
+	fmt.Println("Note saved !")
+	return nil
+}
+
+// var todoText *todo.Todo
 
 func getNoteData() (string, string, error) {
 	title, err := getUserInput("Note title : ")
